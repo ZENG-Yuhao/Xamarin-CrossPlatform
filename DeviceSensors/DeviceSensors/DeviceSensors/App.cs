@@ -72,16 +72,6 @@ namespace DeviceSensors
                         string str = directionEstimate(degree[0]);
 
 
-
-                        //transfer radian to degree
-                        for (int i = 0; i < 3; i++)
-                        {
-                            if (degree[i] < 0)
-                                degree[i] += 360;
-                            //orienTrans[i] = (float)Math.Round(orienTrans[i]);
-                        }
-
-
                         MainPage_ViewModel exemp1 = MainPage.FindByName<MainPage_ViewModel>("mainpageVM");
                         exemp1.TextContent = str;
                         exemp1.ValueX = degree[0];
@@ -134,11 +124,15 @@ namespace DeviceSensors
         protected override void OnSleep()
         {
             // Handle when your app sleeps
+            CrossDeviceMotion.Current.Stop(MotionSensorType.Accelerometer);
+            CrossDeviceMotion.Current.Stop(MotionSensorType.Magnetometer);
         }
 
         protected override void OnResume()
         {
             // Handle when your app resumes
+            CrossDeviceMotion.Current.Start(MotionSensorType.Accelerometer);
+            CrossDeviceMotion.Current.Start(MotionSensorType.Magnetometer);
         }
     }
 }
