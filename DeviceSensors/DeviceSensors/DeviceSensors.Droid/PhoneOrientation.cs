@@ -25,8 +25,8 @@ namespace DeviceSensors.Droid
 
         public IDeviceOrientation setAccelerometerParam(float[] values)
         {
-            //values.CopyTo(acceleroValues, 0);
-            acceleroValues = values;
+            values.CopyTo(acceleroValues, 0);
+            //acceleroValues = values;
             return this;
         }
 
@@ -40,8 +40,8 @@ namespace DeviceSensors.Droid
 
         public IDeviceOrientation setMagnetometerParam(float[] values)
         {
-            //values.CopyTo(magnetoValues, 0);
-            magnetoValues = values;
+            values.CopyTo(magnetoValues, 0);
+            //magnetoValues = values;
             return this;
         }
 
