@@ -13,7 +13,7 @@ namespace DeviceSensors.ViewModel
         double valueX, valueY, valueZ;
         double rotation, rotationX, rotationY;
         public event PropertyChangedEventHandler PropertyChanged;
-
+        private readonly double interval = 1.2;
         public string TextContent
         {
             set
@@ -86,7 +86,7 @@ namespace DeviceSensors.ViewModel
         {
             set
             {
-                if (rotation != value)
+                if (Math.Abs(rotation - value) >= interval)
                 {
                     rotation = value;
                     OnPropertyChanged("Rotation");
@@ -102,7 +102,7 @@ namespace DeviceSensors.ViewModel
         {
             set
             {
-                if (rotationX != value)
+                if (Math.Abs(rotationX - value) >= interval)
                 {
                     rotationX = value;
                     OnPropertyChanged("RotationX");
@@ -118,7 +118,7 @@ namespace DeviceSensors.ViewModel
         {
             set
             {
-                if (RotationY != value)
+                if (Math.Abs(rotationY - value) >= interval)
                 {
                     rotationY = value;
                     OnPropertyChanged("RotationY");
