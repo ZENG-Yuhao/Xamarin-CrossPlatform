@@ -9,7 +9,7 @@ using DeviceSensors.Interface;
 
 namespace DeviceSensors.Droid
 {
-    public class PhoneOrientation : IDeviceOrientation
+    public class PhoneOrientation : Java.Lang.Object, IDeviceOrientation
     {
         private float[] magnetoValues = new float[3];
         private float[] acceleroValues = new float[3];
