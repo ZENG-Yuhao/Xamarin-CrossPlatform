@@ -49,8 +49,8 @@ namespace DeviceSensors
                         values[1] = (float)((MotionVector)a.Value).Y;
                         values[2] = (float)((MotionVector)a.Value).Z;
                         filterLowPass(values, gravity, 0.8f);
-                        orienGetter.setAccelerometerParam(gravity);
-                        //orienGetter.setAccelerometerParam(gravity[0], gravity[1], gravity[2]);
+                        //orienGetter.setAccelerometerParam(gravity);
+                        orienGetter.setAccelerometerParam(gravity[0], gravity[1], gravity[2]);
                         //orienGetter.setAccelerometerParam((float)x, (float)y, (float)z);
                         break;
                     case MotionSensorType.Magnetometer:
@@ -61,9 +61,9 @@ namespace DeviceSensors
                         values[0] = (float)((MotionVector)a.Value).X;
                         values[1] = (float)((MotionVector)a.Value).Y;
                         values[2] = (float)((MotionVector)a.Value).Z;
-                        orienGetter.setMagnetometerParam(values);
-                        //orienGetter.setMagnetometerParam(values[0], values[1], values[2]);
-                        filterLowPass(orienGetter.getOrientation(), orientation, 0.9f);
+                        //orienGetter.setMagnetometerParam(values);
+                        orienGetter.setMagnetometerParam(values[0], values[1], values[2]);
+                        filterLowPass(orienGetter.getOrientation(), orientation, 0.95f);
 
                         for (int i = 0; i < 3; i++)
                             degree[i] = (float)(orientation[i] * 180 / Math.PI);
