@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:DeviceSensors;assembly=DeviceSensors"
+             x:Class="DeviceSensors.View.MainContentPage">
+  
+  <StackLayout Padding="10, 0" BackgroundColor="White">
+    <StackLayout.BindingContext>
+      <local:ViewModel.MainPage_ViewModel  x:Name="mainpageVM" TextContent="Empty"/>
+    </StackLayout.BindingContext>
+
+    <Label Text="{Binding TextContent}"
+           TextColor="Black"
+           HorizontalOptions="Center"/>
+
+    <Label Text="{Binding ValueX, StringFormat='ValueX = {0:F2}'}"
+           TextColor="Black"
+           HorizontalOptions="Center"/>
+
+    <Label Text="{Binding ValueY, StringFormat='ValueY = {0:F2}'}"
+           TextColor="Black"
+           HorizontalOptions="Center"/>
+
+    <Label Text="{Binding ValueZ, StringFormat='ValueZ = {0:F2}'}"
+           TextColor="Black"
+           HorizontalOptions="Center"/>
+
+    <Label Text ="TEXT"
+           TextColor="Black"
+           Rotation="{Binding Rotation}"
+           RotationX="{Binding RotationX}"
+           RotationY="{Binding RotationY}"
+           FontSize="115"
+           HorizontalOptions="Center"
+           VerticalOptions="CenterAndExpand" />
+
+  </StackLayout>
+  
+</ContentPage>
