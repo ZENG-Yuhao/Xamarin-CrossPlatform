@@ -5,6 +5,7 @@ using DeviceSensors.View;
 using DeviceSensors.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -52,6 +53,7 @@ namespace DeviceSensors
                         //orienGetter.setAccelerometerParam(gravity);
                         orienGetter.setAccelerometerParam(gravity[0], gravity[1], gravity[2]);
                         //orienGetter.setAccelerometerParam((float)x, (float)y, (float)z);
+                        Debug.WriteLine("AcceleroValues: {0}, {1}, {2}", values[0], values[1], values[2]);
                         break;
                     case MotionSensorType.Magnetometer:
                         //x = ((MotionVector)a.Value).X;
@@ -61,6 +63,7 @@ namespace DeviceSensors
                         values[0] = (float)((MotionVector)a.Value).X;
                         values[1] = (float)((MotionVector)a.Value).Y;
                         values[2] = (float)((MotionVector)a.Value).Z;
+                        Debug.WriteLine("MagnetoValues: {0}, {1}, {2}", values[0], values[1], values[2]);
                         //orienGetter.setMagnetometerParam(values);
                         orienGetter.setMagnetometerParam(values[0], values[1], values[2]);
                         filterLowPass(orienGetter.getOrientation(), orientation, 0.95f);
@@ -81,7 +84,7 @@ namespace DeviceSensors
                         exemp1.RotationX = -degree[1];
                         exemp1.RotationY = -degree[2];
 
-                        //Debug.WriteLine("Values: {0}, {1}, {2}, {3}", orientation[0], orientation[1], orientation[2], str);
+                        
 
                         break;
                 }
@@ -131,8 +134,9 @@ namespace DeviceSensors
         protected override void OnResume()
         {
             // Handle when your app resumes
-            CrossDeviceMotion.Current.Start(MotionSensorType.Accelerometer);
-            CrossDeviceMotion.Current.Start(MotionSensorType.Magnetometer);
+            CrossDeviceMotion.Current.Start(MotionSensorType.Accelerometer, MotionSensorDelay.Game);
+            CrossDeviceMotion.Current.Start(MotionSensorType.Magnetometer, MotionSensorDelay.Game);
+            
         }
     }
 }
