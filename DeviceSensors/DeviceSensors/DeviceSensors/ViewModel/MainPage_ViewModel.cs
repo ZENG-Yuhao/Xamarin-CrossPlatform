@@ -13,7 +13,7 @@ namespace DeviceSensors.ViewModel
         double valueX, valueY, valueZ;
         double rotation, rotationX, rotationY;
         public event PropertyChangedEventHandler PropertyChanged;
-        private readonly double interval = 1.2;
+        private readonly double interval = 0;
         public string TextContent
         {
             set

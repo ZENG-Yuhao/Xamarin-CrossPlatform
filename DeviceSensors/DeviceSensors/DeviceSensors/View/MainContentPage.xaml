@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:DeviceSensors;assembly=DeviceSensors"
              x:Class="DeviceSensors.View.MainContentPage">
-  
+
   <StackLayout Padding="10, 0" BackgroundColor="White">
     <StackLayout.BindingContext>
       <local:ViewModel.MainPage_ViewModel  x:Name="mainpageVM" TextContent="Empty"/>
@@ -25,15 +25,21 @@
            TextColor="Black"
            HorizontalOptions="Center"/>
 
-    <Label Text ="TEXT"
+    <!-- Text ="UUUUUUUU"
            TextColor="Black"
            Rotation="{Binding Rotation}"
            RotationX="{Binding RotationX}"
            RotationY="{Binding RotationY}"
            FontSize="115"
            HorizontalOptions="Center"
+           VerticalOptions="CenterAndExpand" /> -->
+    <Image Source="http://360investmentadvice.com/wp-content/uploads/2012/12/HiRes.jpg"
+           Rotation="{Binding Rotation}"
+           RotationX="{Binding RotationX}"
+           RotationY="{Binding RotationY}"
+           HorizontalOptions="Center"
            VerticalOptions="CenterAndExpand" />
 
   </StackLayout>
-  
+
 </ContentPage>

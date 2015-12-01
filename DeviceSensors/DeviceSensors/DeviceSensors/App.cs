@@ -126,17 +126,10 @@ namespace DeviceSensors
 
         protected override void OnSleep()
         {
-            // Handle when your app sleeps
-            CrossDeviceMotion.Current.Stop(MotionSensorType.Accelerometer);
-            CrossDeviceMotion.Current.Stop(MotionSensorType.Magnetometer);
         }
 
         protected override void OnResume()
-        {
-            // Handle when your app resumes
-            CrossDeviceMotion.Current.Start(MotionSensorType.Accelerometer, MotionSensorDelay.Game);
-            CrossDeviceMotion.Current.Start(MotionSensorType.Magnetometer, MotionSensorDelay.Game);
-            
+        {   
         }
     }
 }

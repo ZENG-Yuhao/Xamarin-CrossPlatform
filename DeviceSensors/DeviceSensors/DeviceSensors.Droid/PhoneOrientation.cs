@@ -4,15 +4,32 @@ using DeviceSensors.Droid;
 using Android.Hardware;
 using System.Diagnostics;
 using DeviceSensors.Interface;
+using Android.Content;
+using Android.Runtime;
 
 [assembly: Dependency(typeof(PhoneOrientation))]
 
+
 namespace DeviceSensors.Droid
 {
-    public class PhoneOrientation : Java.Lang.Object, IDeviceOrientation
+    public class PhoneOrientation : Java.Lang.Object, ISensorEventListener, IDeviceOrientation
     {
         private float[] magnetoValues = new float[3];
         private float[] acceleroValues = new float[3];
+        private SensorManager sensorManager;
+        private Sensor sensorAccelerometer;
+        private Sensor sensorGyroscope;
+        private Sensor sensorGravity;
+        private Sensor sensorMagnetometer;   
+
+        public PhoneOrientation() : base()
+        {
+            sensorManager = (SensorManager)Android.App.Application.Context.GetSystemService(Context.SensorService);
+            sensorAccelerometer = sensorManager.GetDefaultSensor(SensorType.Accelerometer);
+            sensorGyroscope = sensorManager.GetDefaultSensor(SensorType.Gyroscope);
+            sensorGravity = sensorManager.GetDefaultSensor(SensorType.Gravity);
+            sensorMagnetometer = sensorManager.GetDefaultSensor(SensorType.MagneticField); 
+        }
 
         public IDeviceOrientation setAccelerometerParam(float x, float y, float z)
         {
@@ -78,6 +95,16 @@ namespace DeviceSensors.Droid
         }
 
         public float[] getOrientation(float[] rotationMatrix)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnAccuracyChanged(Sensor sensor, [GeneratedEnum] SensorStatus accuracy)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnSensorChanged(SensorEvent e)
         {
             throw new NotImplementedException();
         }
