@@ -25,20 +25,20 @@
            TextColor="Black"
            HorizontalOptions="Center"/>
 
-    <!-- Text ="UUUUUUUU"
+    <Label Text="TEXTTEXT"
            TextColor="Black"
            Rotation="{Binding Rotation}"
            RotationX="{Binding RotationX}"
            RotationY="{Binding RotationY}"
            FontSize="115"
            HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" /> -->
-    <Image Source="http://360investmentadvice.com/wp-content/uploads/2012/12/HiRes.jpg"
+           VerticalOptions="CenterAndExpand" />
+    <!--Image Source="http://360investmentadvice.com/wp-content/uploads/2012/12/HiRes.jpg"
            Rotation="{Binding Rotation}"
            RotationX="{Binding RotationX}"
            RotationY="{Binding RotationY}"
            HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" />
+           VerticalOptions="CenterAndExpand" /> -->
 
   </StackLayout>
 

@@ -27,8 +27,37 @@ namespace DeviceSensors
 
         protected override void OnStart()
         {
-            sensorRegistration();
+            //sensorRegistration();
+            sensorRT();
         }
+
+        private void sensorRT()
+        {
+            IDeviceSensorTest instance = DependencyService.Get<IDeviceSensorTest>();
+            instance.Start("Game");
+            instance.SensorValueChanged += (sender, values, type) =>
+              {
+                  Debug.WriteLine("############## value changed");
+                  filterLowPass(values, orientation, 0.95f);
+
+                  for (int i = 0; i < 3; i++)
+                      degree[i] = (float)(orientation[i] * 180 / Math.PI);
+
+                  //give a text title to current direction.
+                  string str = "This is the new version.";
+
+
+                  MainPage_ViewModel exemp1 = MainPage.FindByName<MainPage_ViewModel>("mainpageVM");
+                  exemp1.TextContent = str;
+                  exemp1.ValueX = degree[0];
+                  exemp1.ValueY = degree[1];
+                  exemp1.ValueZ = degree[2];
+                  exemp1.Rotation = -degree[0];
+                  exemp1.RotationX = -degree[1];
+                  exemp1.RotationY = -degree[2];
+              };
+        }
+
         private void sensorRegistration()
         {
             CrossDeviceMotion.Current.Start(MotionSensorType.Accelerometer, MotionSensorDelay.Game);
@@ -73,7 +102,7 @@ namespace DeviceSensors
 
                         //give a text title to current direction.
                         string str = directionEstimate(degree[0]);
-
+                        //string str = "old version.";
 
                         MainPage_ViewModel exemp1 = MainPage.FindByName<MainPage_ViewModel>("mainpageVM");
                         exemp1.TextContent = str;
@@ -84,7 +113,7 @@ namespace DeviceSensors
                         exemp1.RotationX = -degree[1];
                         exemp1.RotationY = -degree[2];
 
-                        
+
 
                         break;
                 }
@@ -129,7 +158,7 @@ namespace DeviceSensors
         }
 
         protected override void OnResume()
-        {   
+        {
         }
     }
 }
