@@ -42,21 +42,20 @@ namespace DeviceSensors
                   float[] values = e.SensorValues.Values;
                   filterLowPass(values, orientation, 0.95f);
 
-                  for (int i = 0; i < 3; i++)
-                      degree[i] = orientation[i];
+                  degree = orientation;
 
                   //give a text title to current direction.
                   string str = directionEstimate(degree[0]);
 
 
-                  MainPage_ViewModel exemp1 = MainPage.FindByName<MainPage_ViewModel>("mainpageVM");
-                  exemp1.TextContent = str;
-                  exemp1.ValueX = degree[0];
-                  exemp1.ValueY = degree[1];
-                  exemp1.ValueZ = degree[2];
-                  exemp1.Rotation = -degree[0];
-                  exemp1.RotationX = -degree[1];
-                  exemp1.RotationY = degree[2];
+                  MainPage_ViewModel viewmodel = MainPage.FindByName<MainPage_ViewModel>("mainpageVM");
+                  viewmodel.TextContent = str;
+                  viewmodel.ValueX = degree[0];
+                  viewmodel.ValueY = degree[1];
+                  viewmodel.ValueZ = degree[2];
+                  viewmodel.Rotation = -degree[0];
+                  viewmodel.RotationX = -degree[1];
+                  viewmodel.RotationY = degree[2];
               };
         }
 
