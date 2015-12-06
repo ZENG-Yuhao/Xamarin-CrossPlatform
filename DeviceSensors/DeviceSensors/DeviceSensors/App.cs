@@ -1,5 +1,6 @@
 ﻿using DeviceMotion.Plugin;
 using DeviceMotion.Plugin.Abstractions;
+using DeviceSensors.Hardware.Sensors.Abstraction;
 using DeviceSensors.Interface;
 using DeviceSensors.View;
 using DeviceSensors.ViewModel;
@@ -28,16 +29,44 @@ namespace DeviceSensors
         protected override void OnStart()
         {
             //sensorRegistration();
-            sensorRT();
+            //sensorRT();
+            func();
+        }
+
+        private void func()
+        {
+            IDeviceSensor instance = DependencyService.Get<IDeviceSensor>();
+            instance.Start(DeviceSensorType.Orientation, DeviceSensorDelay.FASTEST);
+            instance.SensorValueChanged += (s, e) =>
+              {
+                  float[] values = e.SensorValues.Values;
+                  filterLowPass(values, orientation, 0.95f);
+
+                  for (int i = 0; i < 3; i++)
+                      degree[i] = orientation[i];
+
+                  //give a text title to current direction.
+                  string str = directionEstimate(degree[0]);
+
+
+                  MainPage_ViewModel exemp1 = MainPage.FindByName<MainPage_ViewModel>("mainpageVM");
+                  exemp1.TextContent = str;
+                  exemp1.ValueX = degree[0];
+                  exemp1.ValueY = degree[1];
+                  exemp1.ValueZ = degree[2];
+                  exemp1.Rotation = -degree[0];
+                  exemp1.RotationX = -degree[1];
+                  exemp1.RotationY = degree[2];
+              };
         }
 
         private void sensorRT()
         {
             IDeviceSensorTest instance = DependencyService.Get<IDeviceSensorTest>();
-            instance.Start("Game");
+            instance.Start("Fastest");
             instance.SensorValueChanged += (sender, values, type) =>
               {
-                  Debug.WriteLine("############## value changed");
+                  //Debug.WriteLine("############## value changed");
                   filterLowPass(values, orientation, 0.95f);
 
                   for (int i = 0; i < 3; i++)

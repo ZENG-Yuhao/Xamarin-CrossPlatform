@@ -36,6 +36,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Hardware\Sensors\Abstraction\IDeviceSensor.cs" />
+    <Compile Include="Hardware\Sensors\Abstraction\DeviceSensorDelay.cs" />
+    <Compile Include="Hardware\Sensors\Abstraction\DeviceSensorType.cs" />
+    <Compile Include="Hardware\Sensors\Abstraction\DeviceSensorValues.cs" />
     <Compile Include="Interface\IDeviceOrientation.cs" />
     <Compile Include="Interface\IDeviceSensorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,7 +76,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\" />
-    <Folder Include="Plugin\Abstraction\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="View\MainContentPage.xaml">

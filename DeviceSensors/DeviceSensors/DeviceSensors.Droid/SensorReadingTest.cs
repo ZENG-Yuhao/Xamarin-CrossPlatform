@@ -27,7 +27,19 @@ namespace DeviceSensors.Droid
 
         public SensorReadingTest()
         {
-            //For dependency, this constructor must be empty.
+            sensorManager = (SensorManager)Android.App.Application.Context.GetSystemService(Context.SensorService);
+            sensorAccelerometer = sensorManager.GetDefaultSensor(SensorType.Accelerometer);
+            sensorMagnetometer = sensorManager.GetDefaultSensor(SensorType.MagneticField);
+            sensorGravity = sensorManager.GetDefaultSensor(SensorType.Gravity);
+            sensorGyroscope = sensorManager.GetDefaultSensor(SensorType.Gyroscope);
+            sensorStatus = new Dictionary<SensorType, bool>()
+            {
+                { SensorType.Accelerometer, false},
+                { SensorType.MagneticField, false},
+                { SensorType.Gravity, false},
+                { SensorType.Gyroscope, false}
+            };
+
         }
 
         public float[] getDeviceOrientation()
@@ -37,18 +49,7 @@ namespace DeviceSensors.Droid
 
         public void Start(string delayType)
         {
-            sensorManager = (SensorManager)Android.App.Application.Context.GetSystemService(Context.SensorService);
-            sensorAccelerometer = sensorManager.GetDefaultSensor(SensorType.Accelerometer);
-            sensorMagnetometer = sensorManager.GetDefaultSensor(SensorType.MagneticField);
-            sensorGravity = sensorManager.GetDefaultSensor(SensorType.Gravity);
-            sensorGyroscope = sensorManager.GetDefaultSensor(SensorType.Gyroscope);
-            sensorStatus = new Dictionary<SensorType, bool>()
-            {
-                {SensorType.Accelerometer, false},
-                {SensorType.MagneticField, false},
-                {SensorType.Gravity, false},
-                {SensorType.Gyroscope, false}
-            };
+
 
             SensorDelay delay;
             switch (delayType)
@@ -109,6 +110,7 @@ namespace DeviceSensors.Droid
             {
                 case SensorType.Gravity:
                     gravity = values;
+                    filterLowPass(values, gravity, 0.8f);
                     Console.WriteLine("Accelerometer"+values[0]);
                     break;
                 case SensorType.MagneticField:
@@ -132,6 +134,16 @@ namespace DeviceSensors.Droid
         public void ClearEvents()
         {
             throw new NotImplementedException();
+        }
+
+        public void filterLowPass(float[] arrin, float[] arrout, float alpha)
+        {
+            int len = arrin.Length;
+            //Debug.WriteLine("arrin.length={0}, sizeof float={1}, len={2}", arrin.Length, sizeof(float), len);
+            for (int i = 0; i < len; i++)
+            {
+                arrout[i] = alpha * arrout[i] + (1 - alpha) * arrin[i];
+            }
         }
     }
 }
