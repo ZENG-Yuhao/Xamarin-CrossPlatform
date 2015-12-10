@@ -7,7 +7,7 @@ using DeviceSensors.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.Linq;                          
 using System.Text;
 
 using Xamarin.Forms;
@@ -56,6 +56,7 @@ namespace DeviceSensors
                   viewmodel.Rotation = -degree[0];
                   viewmodel.RotationX = -degree[1];
                   viewmodel.RotationY = degree[2];
+                  
               };
         }
 
