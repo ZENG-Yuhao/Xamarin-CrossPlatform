@@ -5,7 +5,7 @@ using Android.Hardware;
 using Android.Runtime;
 using System.Collections.Generic;
 using DeviceSensors.Droid.Hardware.Sensors.Implementation;
-using DeviceSensors.Hardware.Sensors.Abstraction;
+using DeviceSensors.Hardware.Sensors.Abstractions;
 using Android.Content;
 
 [assembly: Dependency(typeof(Implementation))]
@@ -34,6 +34,7 @@ namespace DeviceSensors.Droid.Hardware.Sensors.Implementation
             sensorGyroscope = sensorManager.GetDefaultSensor(SensorType.Gyroscope);
             sensorMagnetometer = sensorManager.GetDefaultSensor(SensorType.MagneticField);
             sensorOrientation = sensorManager.GetDefaultSensor(SensorType.Orientation);
+            //Instead of using raw data from the orientation sensor, we recommend that you use the getRotationMatrix() method in conjunction with the getOrientation() method to compute orientation values.You can also use the remapCoordinateSystem() method to translate the orientation values to your application's frame of reference.
             sensorStatus = new Dictionary<DeviceSensorType, bool>()
             {
                 { DeviceSensorType.Accelerometer, false},
@@ -41,7 +42,6 @@ namespace DeviceSensors.Droid.Hardware.Sensors.Implementation
                 { DeviceSensorType.Gyroscope, false},
                 { DeviceSensorType.Magnetometer, false},
                 { DeviceSensorType.Orientation, false }
-
             };
         }
 

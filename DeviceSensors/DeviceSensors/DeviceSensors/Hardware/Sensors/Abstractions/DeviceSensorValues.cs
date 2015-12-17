@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace DeviceSensors.Hardware.Sensors.Abstraction
+namespace DeviceSensors.Hardware.Sensors.Abstractions
 {
     public class DeviceSensorValues
     {

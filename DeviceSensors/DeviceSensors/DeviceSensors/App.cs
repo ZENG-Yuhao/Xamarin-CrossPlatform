@@ -1,6 +1,6 @@
 ﻿using DeviceMotion.Plugin;
 using DeviceMotion.Plugin.Abstractions;
-using DeviceSensors.Hardware.Sensors.Abstraction;
+using DeviceSensors.Hardware.Sensors.Abstractions;
 using DeviceSensors.Interface;
 using DeviceSensors.View;
 using DeviceSensors.ViewModel;
@@ -29,8 +29,8 @@ namespace DeviceSensors
         protected override void OnStart()
         {
             //sensorRegistration();
-            //sensorRT();
-            func();
+            sensorRT();
+            //func();
         }
 
         private void func()

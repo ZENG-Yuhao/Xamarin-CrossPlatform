@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DeviceSensors.Hardware.Sensors.Abstraction
+namespace DeviceSensors.Hardware.Sensors.Abstractions
 {
     public delegate void SensorValueChangedEventHandler(object sender, SensorValueChangedEventArgs e);
 

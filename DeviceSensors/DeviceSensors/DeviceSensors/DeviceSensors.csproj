@@ -36,10 +36,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="Hardware\Sensors\Abstraction\IDeviceSensor.cs" />
-    <Compile Include="Hardware\Sensors\Abstraction\DeviceSensorDelay.cs" />
-    <Compile Include="Hardware\Sensors\Abstraction\DeviceSensorType.cs" />
-    <Compile Include="Hardware\Sensors\Abstraction\DeviceSensorValues.cs" />
+    <Compile Include="Hardware\Sensors\Abstractions\IDeviceSensor.cs" />
+    <Compile Include="Hardware\Sensors\Abstractions\DeviceSensorDelay.cs" />
+    <Compile Include="Hardware\Sensors\Abstractions\DeviceSensorType.cs" />
+    <Compile Include="Hardware\Sensors\Abstractions\DeviceSensorValues.cs" />
     <Compile Include="Interface\IDeviceOrientation.cs" />
     <Compile Include="Interface\IDeviceSensorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
