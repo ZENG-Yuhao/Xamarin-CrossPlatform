@@ -6,6 +6,7 @@
         Gravimeter,
         Gyroscope,
         Magnetometer,
-        Orientation
+        Orientation,
+		OrientationRaw
     }
 }

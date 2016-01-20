@@ -21,10 +21,14 @@ namespace DeviceSensors.Droid.Hardware.Sensors.Implementation
         private Sensor sensorGyroscope;
         private Sensor sensorMagnetometer;
         private Sensor sensorOrientation;
+		private bool isOrientationRawActivated;
+		private DeviceSensorValues gravity;
+		private DeviceSensorValues magnetic;
 
         private IDictionary<DeviceSensorType, bool> sensorStatus;
 
         public event SensorValueChangedEventHandler SensorValueChanged;
+
 
         public Implementation()
         {
@@ -41,8 +45,11 @@ namespace DeviceSensors.Droid.Hardware.Sensors.Implementation
                 { DeviceSensorType.Gravimeter, false},
                 { DeviceSensorType.Gyroscope, false},
                 { DeviceSensorType.Magnetometer, false},
-                { DeviceSensorType.Orientation, false }
+                { DeviceSensorType.Orientation, false },
+				{ DeviceSensorType.OrientationRaw, false}
             };
+
+			isOrientationRawActivated = false;
         }
 
 
@@ -61,22 +68,38 @@ namespace DeviceSensors.Droid.Hardware.Sensors.Implementation
             if (SensorValueChanged == null)
                 return;
 
-            DeviceSensorValues sensorValues = new DeviceSensorValues();
-            sensorValues.Values[0] = e.Values[0];
-            sensorValues.Values[1] = e.Values[1];
-            sensorValues.Values[2] = e.Values[2];
+			DeviceSensorValues sensorValues = new DeviceSensorValues(e.Values[0], e.Values[1], e.Values[2]);
             switch (e.Sensor.Type)
             {
                 case SensorType.Accelerometer:
                     SensorValueChanged(this, new SensorValueChangedEventArgs(sensorValues, DeviceSensorType.Accelerometer));
                     break;
-                case SensorType.Gravity:
+				case SensorType.Gravity:
+					if (isOrientationRawActivated) {
+						gravity = sensorValues.getCopy ();
+					}
                     SensorValueChanged(this, new SensorValueChangedEventArgs(sensorValues, DeviceSensorType.Gravimeter));
                     break;
                 case SensorType.Gyroscope:
                     SensorValueChanged(this, new SensorValueChangedEventArgs(sensorValues, DeviceSensorType.Gyroscope));
                     break;
-                case SensorType.MagneticField:
+				case SensorType.MagneticField:
+					if (isOrientationRawActivated) {
+						magnetic = sensorValues.getCopy ();
+						if (gravity != null) {
+							float[] R1 = new float[9];
+							float[] R = new float[9];
+							float[] I = new float[9];
+							if (SensorManager.GetRotationMatrix(R1, I, gravity.Values, magnetic.Values))
+							{
+								//remap x axis to z axis
+								SensorManager.RemapCoordinateSystem(R1, Axis.X, Axis.Z, R);
+								DeviceSensorValues orienValues = new DeviceSensorValues ();
+								SensorManager.GetOrientation(R, orienValues.Values);
+								SensorValueChanged(this, new SensorValueChangedEventArgs(orienValues, DeviceSensorType.OrientationRaw));
+							}
+						}
+					}
                     SensorValueChanged(this, new SensorValueChangedEventArgs(sensorValues, DeviceSensorType.Magnetometer));
                     break;
                 case SensorType.Orientation:
@@ -131,7 +154,6 @@ namespace DeviceSensors.Droid.Hardware.Sensors.Implementation
 
                 case DeviceSensorType.Magnetometer:
                     if (sensorMagnetometer != null)
-
                         sensorManager.RegisterListener(this, sensorMagnetometer, delay);
                     else
                         Console.WriteLine("Magnetometer is null.");
@@ -141,8 +163,18 @@ namespace DeviceSensors.Droid.Hardware.Sensors.Implementation
                     if (sensorOrientation != null)
                         sensorManager.RegisterListener(this, sensorOrientation, delay);
                     else
-                        Console.WriteLine("Orientation not available. Accelerometer and Magnetometer must not be null.");
+                        Console.WriteLine("Orientation not available.");
                     break;
+				case DeviceSensorType.OrientationRaw:
+					if (sensorGravimeter != null && sensorMagnetometer != null) {
+						sensorManager.RegisterListener (this, sensorGravimeter, delay);
+						sensorManager.RegisterListener (this, sensorMagnetometer, delay);
+						isOrientationRawActivated = true;
+					} else {
+							Console.WriteLine ("OrientationRaw not available. Accelerometer and Magnetometer must not be null.");
+					}
+					
+					break;
             } //end case
             sensorStatus[sensorType] = true;
         }
@@ -173,7 +205,6 @@ namespace DeviceSensors.Droid.Hardware.Sensors.Implementation
 
                 case DeviceSensorType.Magnetometer:
                     if (sensorMagnetometer != null)
-
                         sensorManager.UnregisterListener(this, sensorMagnetometer);
                     else
                         Console.WriteLine("Magnetometer is null.");
@@ -183,8 +214,16 @@ namespace DeviceSensors.Droid.Hardware.Sensors.Implementation
                     if (sensorOrientation != null)
                         sensorManager.UnregisterListener(this, sensorOrientation);
                     else
-                        Console.WriteLine("Orientation not available. Accelerometer and Magnetometer must not be null.");
+                        Console.WriteLine("Orientation not available.");
                     break;
+				case DeviceSensorType.OrientationRaw:
+					if (sensorGravimeter != null && sensorMagnetometer != null) {
+						sensorManager.UnregisterListener(this, sensorGravimeter);
+						sensorManager.UnregisterListener(this, sensorMagnetometer);
+						isOrientationRawActivated = false;
+					} else
+						Console.WriteLine ("OrientationRaw not available. Accelerometer and Magnetometer must not be null.");
+					break;
             } //end case
             sensorStatus[sensorType] = false;
         }

@@ -33,6 +33,7 @@ namespace DeviceSensors
             //func();
         }
 
+		//exemple for IDeviceSensor
         private void func()
         {
             IDeviceSensor instance = DependencyService.Get<IDeviceSensor>();
