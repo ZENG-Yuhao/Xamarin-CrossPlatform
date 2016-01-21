@@ -22,8 +22,8 @@ namespace DeviceSensors.Droid.Hardware.Sensors.Implementation
         private Sensor sensorMagnetometer;
         private Sensor sensorOrientation;
 		private bool isOrientationRawActivated;
-		private DeviceSensorValues gravity;
-		private DeviceSensorValues magnetic;
+		private DeviceSensorValues gravity = new DeviceSensorValues();
+		private DeviceSensorValues magnetic = new DeviceSensorValues();
 
         private IDictionary<DeviceSensorType, bool> sensorStatus;
 
@@ -38,6 +38,7 @@ namespace DeviceSensors.Droid.Hardware.Sensors.Implementation
             sensorGyroscope = sensorManager.GetDefaultSensor(SensorType.Gyroscope);
             sensorMagnetometer = sensorManager.GetDefaultSensor(SensorType.MagneticField);
             sensorOrientation = sensorManager.GetDefaultSensor(SensorType.Orientation);
+
             //Instead of using raw data from the orientation sensor, we recommend that you use the getRotationMatrix() method in conjunction with the getOrientation() method to compute orientation values.You can also use the remapCoordinateSystem() method to translate the orientation values to your application's frame of reference.
             sensorStatus = new Dictionary<DeviceSensorType, bool>()
             {
@@ -69,15 +70,18 @@ namespace DeviceSensors.Droid.Hardware.Sensors.Implementation
                 return;
 
 			DeviceSensorValues sensorValues = new DeviceSensorValues(e.Values[0], e.Values[1], e.Values[2]);
+
             switch (e.Sensor.Type)
             {
                 case SensorType.Accelerometer:
                     SensorValueChanged(this, new SensorValueChangedEventArgs(sensorValues, DeviceSensorType.Accelerometer));
                     break;
 				case SensorType.Gravity:
-					if (isOrientationRawActivated) {
-						gravity = sensorValues.getCopy ();
-					}
+                    if (isOrientationRawActivated)
+                    {
+                        //gravity = sensorValues.getCopy ();
+                        filterLowPass(sensorValues.Values, gravity.Values, 0.8f);
+                    }
                     SensorValueChanged(this, new SensorValueChangedEventArgs(sensorValues, DeviceSensorType.Gravimeter));
                     break;
                 case SensorType.Gyroscope:
@@ -92,8 +96,9 @@ namespace DeviceSensors.Droid.Hardware.Sensors.Implementation
 							float[] I = new float[9];
 							if (SensorManager.GetRotationMatrix(R1, I, gravity.Values, magnetic.Values))
 							{
-								//remap x axis to z axis
-								SensorManager.RemapCoordinateSystem(R1, Axis.X, Axis.Z, R);
+                                //remap y axis to z axis
+                                SensorManager.RemapCoordinateSystem(R1, Axis.X, Axis.Z, R);
+                                //R = R1;
 								DeviceSensorValues orienValues = new DeviceSensorValues ();
 								SensorManager.GetOrientation(R, orienValues.Values);
 								SensorValueChanged(this, new SensorValueChangedEventArgs(orienValues, DeviceSensorType.OrientationRaw));
@@ -227,5 +232,17 @@ namespace DeviceSensors.Droid.Hardware.Sensors.Implementation
             } //end case
             sensorStatus[sensorType] = false;
         }
-    }
-}
+
+
+        public void filterLowPass(float[] arrin, float[] arrout, float alpha)
+        {
+            int len = arrin.Length;
+            //Debug.WriteLine("arrin.length={0}, sizeof float={1}, len={2}", arrin.Length, sizeof(float), len);
+            for (int i = 0; i < len; i++)
+            {
+                arrout[i] = alpha * arrout[i] + (1 - alpha) * arrin[i];
+            }
+        }
+
+    }//end class
+} //end namespace

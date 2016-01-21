@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Hardware\Sensors\DeviceSensor.cs" />
     <Compile Include="Hardware\Sensors\Abstractions\IDeviceSensor.cs" />
     <Compile Include="Hardware\Sensors\Abstractions\DeviceSensorDelay.cs" />
     <Compile Include="Hardware\Sensors\Abstractions\DeviceSensorType.cs" />

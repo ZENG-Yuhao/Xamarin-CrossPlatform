@@ -29,21 +29,23 @@ namespace DeviceSensors
         protected override void OnStart()
         {
             //sensorRegistration();
-            sensorRT();
-            //func();
+            //sensorRT();
+                 func1();
         }
 
 		//exemple for IDeviceSensor
         private void func()
         {
             IDeviceSensor instance = DependencyService.Get<IDeviceSensor>();
-            instance.Start(DeviceSensorType.Orientation, DeviceSensorDelay.FASTEST);
+            instance.Start(DeviceSensorType.OrientationRaw, DeviceSensorDelay.FASTEST);
             instance.SensorValueChanged += (s, e) =>
               {
-                  float[] values = e.SensorValues.Values;
-                  filterLowPass(values, orientation, 0.95f);
+                  if (e.SensorType != DeviceSensorType.OrientationRaw) return;
 
-                  degree = orientation;
+                  filterLowPass(e.SensorValues.Values, orientation, 0.8f);
+
+                  for (int i = 0; i < 3; i++)
+                      degree[i] = (float)(orientation[i] * 180 / Math.PI);
 
                   //give a text title to current direction.
                   string str = directionEstimate(degree[0]);
@@ -54,12 +56,41 @@ namespace DeviceSensors
                   viewmodel.ValueX = degree[0];
                   viewmodel.ValueY = degree[1];
                   viewmodel.ValueZ = degree[2];
-                  viewmodel.Rotation = -degree[0];
-                  viewmodel.RotationX = -degree[1];
-                  viewmodel.RotationY = degree[2];
+                  viewmodel.Rotation = -degree[1];
+                  viewmodel.RotationX = -degree[0];
+                  viewmodel.RotationY = -degree[2];
                   
               };
         }
+
+        private void func1()
+        {
+            IDeviceSensor instance = DependencyService.Get<IDeviceSensor>();
+            instance.Start(DeviceSensorType.Orientation, DeviceSensorDelay.UI);
+            instance.SensorValueChanged += (s, e) =>
+            {
+                if (e.SensorType != DeviceSensorType.Orientation) return;
+
+                filterLowPass(e.SensorValues.Values, orientation, 0.8f);
+
+                degree = orientation;
+
+                //give a text title to current direction.
+                string str = directionEstimate(degree[0]);
+
+
+                MainPage_ViewModel viewmodel = MainPage.FindByName<MainPage_ViewModel>("mainpageVM");
+                viewmodel.TextContent = str;
+                viewmodel.ValueX = degree[0];
+                viewmodel.ValueY = degree[1];
+                viewmodel.ValueZ = degree[2];
+                viewmodel.Rotation = -degree[1];
+                viewmodel.RotationX = -degree[0];
+                viewmodel.RotationY = -degree[2];
+
+            };
+        }
+
 
         private void sensorRT()
         {
